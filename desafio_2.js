@@ -1,12 +1,10 @@
 const fs =require("fs");
+const dirNameAsync="./filesDesafio2";
+const path= dirNameAsync + "/callbackDesafio2.txt";
 
 class ProductManager {
-    constructor(){
+    constructor(dirNameAsync,path){
         let products=[];
-        const dirNameAsync="./filesDesafio2";
-        const path= dirNameAsync + "/callbackDesafio2.txt";
-
-
         this.products = products;
         this.dirName=dirNameAsync;
         this.path=path;
@@ -49,9 +47,10 @@ class ProductManager {
         }else{
             let result;
             let jsonString= await fs.promises.readFile(path,"utf-8");
+            contenidoObj= JSON.parse(jsonString)
             console.log("Obteniendo datos del archivo");
 
-            if(jsonString === ""){
+            if(contenidoObj === ""){
                 result= "No hay productos";
             }else{
                 result= contenidoObj;
@@ -87,9 +86,9 @@ class ProductManager {
 
 }
 
-const productManager1 = new ProductManager();
+const productManager1 = new ProductManager(dirNameAsync,path);
 console.log(productManager1.getProducts());
-/* productManager1.addProduct("Jetta 2019", 
+productManager1.addProduct("Jetta 2019", 
                            "Jetta 2019 confortline con quemacocos",
                            250000,
                            "https://d2n4wb9orp1vta.cloudfront.net/cms/brand/PT-Mex/2019-PT-Mex/jetta.jpg;maxWidth=1200",
@@ -101,4 +100,4 @@ productManager1.addProduct("CRV 2019",
                            "https://parentesis.com/imagesPosts/CR-V-2019-2.jpg",
                            3);
 console.log(productManager1.getProducts());
-console.log(productManager1.getProductsById(1)); */
+console.log(productManager1.getProductsById(1));
