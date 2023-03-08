@@ -1,6 +1,7 @@
 
 class ProductManager {
-    constructor(products){
+    constructor(){
+        let products=[];
         this.products = products;
     }
 
@@ -50,8 +51,7 @@ class ProductManager {
 
 }
 
-let products=[];
-const productManager1 = new ProductManager(products);
+const productManager1 = new ProductManager();
 console.log(productManager1.getProducts());
 productManager1.addProduct("Jetta 2019", 
                            "Jetta 2019 confortline con quemacocos",
@@ -65,4 +65,4 @@ productManager1.addProduct("CRV 2019",
                            "https://parentesis.com/imagesPosts/CR-V-2019-2.jpg",
                            3);
 console.log(productManager1.getProducts());
-console.log(productManager1.getProductsById(6));
+console.log(productManager1.getProductsById(1));
