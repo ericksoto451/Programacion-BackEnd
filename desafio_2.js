@@ -1,6 +1,6 @@
 const fs =require("fs");
 const dirNameAsync="./filesDesafio2";
-const path= dirNameAsync + "/callbackDesafio2.txt";
+const path="./callbackDesafio2.txt";
 
 class ProductManager {
     constructor(dirNameAsync,path){
@@ -10,7 +10,7 @@ class ProductManager {
         this.path=path;
 
         const crearArchivo = async () =>{
-            await fs.promises.mkdir(this.dirName, {recursive: true}); 
+            //await fs.promises.mkdir(this.dirName, {recursive: true}); 
             await fs.promises.writeFile(this.path, "");
 
         }
@@ -36,27 +36,27 @@ class ProductManager {
             ];
         
             this.products.push(product);
-            await fs.promises.writeFile(this.path,JSON.stringify(product));
+            let jsonString= await fs.promises.readFile(this.path,"utf-8");
+            await fs.promises.appendFile(this.path,JSON.stringify(product));
+            
         }
     }
 
 
-    async getProducts(){
+    getProducts = async() =>{
         if(!fs.existsSync(this.path)){
             throw Error("Los productos no se pueden leer porque no existe el archivo");
         }else{
             let result;
-            let jsonString= await fs.promises.readFile(path,"utf-8");
-            contenidoObj= JSON.parse(jsonString)
-            console.log("Obteniendo datos del archivo");
-
-            if(contenidoObj === ""){
-                result= "No hay productos";
+            let jsonString= await fs.promises.readFile(this.path,"utf-8");
+            if (jsonString == ""){
+                result="No hay productos en el archivo";
             }else{
-                result= contenidoObj;
+                result=jsonString;
             }
-
+            console.log("Este es el result" + result)
             return result;
+
         }
 
         
@@ -68,9 +68,10 @@ class ProductManager {
             throw Error("El producto no se puede leer porque no existe el archivo");
         }else{
             let result;
-            let jsonString= await fs.promises.readFile(path,"utf-8");
-            //let contenidoObj=JSON.parse(jsonString);
-            jsonString.forEach(objeto => {
+            let jsonString= await fs.promises.readFile(this.path,"utf-8");
+            let contenidoObj=JSON.parse(jsonString);
+            console.log(contenidoObj);
+            /* contenidoObj.forEach(objeto => {
                 Object.values(objeto).forEach(item =>{
                     const { code } = item;
                     if(id === code)result=[...objeto]
@@ -78,7 +79,7 @@ class ProductManager {
                 })
             })
             if(result=== undefined) result="NOT FOUND";
-            return result;
+            return result; */
         }
         
     }
@@ -87,17 +88,22 @@ class ProductManager {
 }
 
 const productManager1 = new ProductManager(dirNameAsync,path);
-console.log(productManager1.getProducts());
-productManager1.addProduct("Jetta 2019", 
+const imprimirSolicitudes = async()=>{
+    console.log(await productManager1.getProducts());
+    await productManager1.addProduct("Jetta 2019", 
                            "Jetta 2019 confortline con quemacocos",
                            250000,
                            "https://d2n4wb9orp1vta.cloudfront.net/cms/brand/PT-Mex/2019-PT-Mex/jetta.jpg;maxWidth=1200",
                            1);
 
-productManager1.addProduct("CRV 2019", 
+    await productManager1.addProduct("CRV 2019", 
                            "CRV 2019 con asientos de piel",
                            250000,
                            "https://parentesis.com/imagesPosts/CR-V-2019-2.jpg",
                            3);
-console.log(productManager1.getProducts());
-console.log(productManager1.getProductsById(1));
+
+    await console.log(productManager1.getProducts());
+    await console.log(productManager1.getProductsById(1));
+}
+imprimirSolicitudes();
+
