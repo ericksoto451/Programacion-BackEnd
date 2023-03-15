@@ -11,7 +11,7 @@ class ProductManager {
 
         const crearArchivo = async () =>{
             //await fs.promises.mkdir(this.dirName, {recursive: true}); 
-            await fs.promises.writeFile(this.path, "");
+            await fs.promises.writeFile(this.path, "[]");
 
         }
         crearArchivo();
@@ -23,21 +23,30 @@ class ProductManager {
         if(!fs.existsSync(this.path)){
             throw Error("El archivo no existe, por eso no es posible agregar ningún producto");
         }else{
-            let idCreated=this.products.length + 1;
-            let product=[
-                {
-                    title: title,
-                    description: description,
-                    price: price,
-                    thumbnail: thumbnail,
-                    code: idCreated,
-                    stock: stock
-                }
-            ];
-        
-            this.products.push(product);
-            let jsonString= await fs.promises.readFile(this.path,"utf-8");
-            await fs.promises.appendFile(this.path,JSON.stringify(product));
+            try{
+                let idCreated = this.products.length + 1;
+                let product = [
+                    {
+                        title: title,
+                        description: description,
+                        price: price,
+                        thumbnail: thumbnail,
+                        code: idCreated,
+                        stock: stock
+                    }
+                ];
+
+                this.products.push(product);
+                let jsonString = await fs.promises.readFile(this.path, "utf-8");
+                const parseoString = JSON.parse(jsonString);
+                parseoString.push(product);
+
+
+                await fs.promises.writeFile(this.path, JSON.stringify(parseoString));
+            
+            }catch(e){
+                Error(e);
+            }
             
         }
     }
@@ -49,12 +58,12 @@ class ProductManager {
         }else{
             let result;
             let jsonString= await fs.promises.readFile(this.path,"utf-8");
-            if (jsonString == ""){
+            const parseoString = JSON.parse(jsonString);
+            if (parseoString == "[]"){
                 result="No hay productos en el archivo";
             }else{
-                result=jsonString;
+                result=parseoString;
             }
-            console.log("Este es el result" + result)
             return result;
 
         }
@@ -71,7 +80,7 @@ class ProductManager {
             let jsonString= await fs.promises.readFile(this.path,"utf-8");
             let contenidoObj=JSON.parse(jsonString);
             console.log(contenidoObj);
-            /* contenidoObj.forEach(objeto => {
+            contenidoObj.forEach(objeto => {
                 Object.values(objeto).forEach(item =>{
                     const { code } = item;
                     if(id === code)result=[...objeto]
@@ -79,7 +88,7 @@ class ProductManager {
                 })
             })
             if(result=== undefined) result="NOT FOUND";
-            return result; */
+            return result;
         }
         
     }
@@ -101,9 +110,8 @@ const imprimirSolicitudes = async()=>{
                            250000,
                            "https://parentesis.com/imagesPosts/CR-V-2019-2.jpg",
                            3);
-
-    await console.log(productManager1.getProducts());
-    await console.log(productManager1.getProductsById(1));
+    console.log(await productManager1.getProducts());
+    console.log(await productManager1.getProductsById(1));
 }
 imprimirSolicitudes();
 
