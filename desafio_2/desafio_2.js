@@ -1,4 +1,4 @@
-const fs =require("fs");
+ 
 const dirNameAsync="./filesDesafio2";
 const path="./callbackDesafio2.txt";
 
@@ -59,7 +59,7 @@ class ProductManager {
             let result;
             let jsonString= await fs.promises.readFile(this.path,"utf-8");
             const parseoString = JSON.parse(jsonString);
-            if (parseoString == "[]"){
+            if (Object.entries(parseoString).length === 0){
                 result="No hay productos en el archivo";
             }else{
                 result=parseoString;
@@ -83,7 +83,7 @@ class ProductManager {
             contenidoObj.forEach(objeto => {
                 Object.values(objeto).forEach(item =>{
                     const { code } = item;
-                    if(id === code)result=[...objeto]
+                    if(id === code) result=[...objeto]
                     
                 })
             })
