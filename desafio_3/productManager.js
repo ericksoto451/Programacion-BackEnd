@@ -75,6 +75,34 @@ export default class ProductManager {
         
     }
 
+    getProductsByLimit = async(limit) =>{
+        if(!fs.existsSync(this.path)){
+            throw Error("Los productos no se pueden leer porque no existe el archivo");
+        }else{
+            let result;
+            let productos=[];
+            let jsonString= await fs.promises.readFile(this.path,"utf-8");
+            const parseoString = JSON.parse(jsonString);
+            if (Object.entries(parseoString).length === 0){
+                result=[{"message": "NO HAY PRODUCTOS"}];
+            }else{
+                parseoString.forEach(objeto => {
+                    Object.values(objeto).forEach(item =>{
+                        const { code } = item;
+                        if(code <= limit) {
+                            productos.push(objeto);
+                        }
+                    })
+                })
+                result=productos;
+            }
+            return result;
+
+        }
+
+        
+    }
+
 
     async getProductsById(id){
         if(!fs.existsSync(this.path)){

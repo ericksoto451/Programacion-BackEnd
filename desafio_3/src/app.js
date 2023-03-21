@@ -37,6 +37,12 @@ app.get('/productos/:userID', async(req,res) =>{
 })
 
 
+//limitar cantidad de productos
+
+app.get('/productos/limit/:limit', async(req,res) =>{
+    res.send( await productManager1.getProductsByLimit(req.params.limit));
+})
+
 
 
 
