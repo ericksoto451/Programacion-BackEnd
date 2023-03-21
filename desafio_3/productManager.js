@@ -109,17 +109,22 @@ export default class ProductManager {
             throw Error("El producto no se puede leer porque no existe el archivo");
         }else{
             let result;
+            let producto=[];
             let jsonString= await fs.promises.readFile(this.path,"utf-8");
             let parseoString = JSON.parse(jsonString);
-            parseoString.forEach(objeto => {
-                Object.values(objeto).forEach(item =>{
-                    const { code } = item;
-                    if(id === code)result=[...objeto]
-                    
+            if (Object.entries(parseoString).length === 0){
+                result=[{"message": "NO HAY PRODUCTOS"}];
+            }else{
+                parseoString.forEach(objeto => {
+                    Object.values(objeto).forEach(item =>{
+                        const { code } = item;
+                        if(code == id) {
+                            producto.push(objeto);
+                        }
+                    })
                 })
-            })
-
-            if(result === undefined) result=[{"message": `NO EXISTE EL PRODUCTO ${id}`}];
+                result=producto;
+            }
             return result;
         }
         
