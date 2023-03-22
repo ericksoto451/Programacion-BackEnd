@@ -2,10 +2,11 @@ import express from 'express';
 import ProductManager from './productManager.js';
 
 const dirNameAsync="./filesDesafio3";
-const path="./callbackDesafio3.txt";
+const path="./callback.txt";
 const app=express();
 const PORT =8080;
 
+// Se prepara la configuración del servidor para trabajar con archivos JSON
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
@@ -42,8 +43,14 @@ app.get('/productos/:userID', async(req,res) =>{
 
 //Metodo Post que agregará un nuevo producto
 app.post('/productos', async(req,res) =>{
-    const producto= await productManager1.getProductsById(req.params.userID);
-    res.send(producto);
+    let user = req.body;
+    console.log(user);
+    const producto= await productManager1.addProduct(user.title,user.description,user.price,user.thumbnail,user.stock,user.status,user.category);
+
+    /* if(!producto.title  || !producto.description || !producto.price || !producto.thumbnail || !producto.stock || !producto.status || !producto.category){
+        return res.status(400).send({status: "Error", msg: "Valores incompletos, revisar nuevamente"});
+    } */
+    res.send({status: "success" , msg: "Se agrego un usuario nuevo exitosamente"});
 })
 
 

@@ -22,7 +22,7 @@ export default class ProductManager {
     }
 
 
-   async addProduct(title, description, price, thumbnail,stock){
+   async addProduct(title, description, price, thumbnail,stock,status,category){
 
         if(!fs.existsSync(this.path)){
             throw Error("El archivo no existe, por eso no es posible agregar ningún producto");
@@ -36,7 +36,9 @@ export default class ProductManager {
                         price: price,
                         thumbnail: thumbnail,
                         code: idCreated,
-                        stock: stock
+                        stock: stock,
+                        status: status,
+                        category: category
                     }
                 ];
 
