@@ -65,6 +65,17 @@ app.put('/productos/:pid', async(req,res) =>{
     res.send(producto);
 })
 
+//Metodo Delete que eliminará un producto existente
+
+app.delete('/productos/:pid', async(req,res) =>{
+    let id=parseInt(req.params.pid);
+    const producto= await productManager1.deleteProduct(id);
+
+    /* if(!producto.title  || !producto.description || !producto.price || !producto.thumbnail || !producto.stock || !producto.status || !producto.category){
+        return res.status(400).send({status: "Error", msg: "Valores incompletos, revisar nuevamente"});
+    } */
+    res.send(producto);
+})
 
 
 
