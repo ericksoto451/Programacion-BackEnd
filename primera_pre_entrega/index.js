@@ -1,8 +1,10 @@
 import express from 'express';
 import ProductManager from './productManager.js';
+import CartManager from './cartManager.js';
 
 const dirNameAsync="./filesDesafio3";
 const path="./callback.txt";
+const cartPath="./cartCallback.txt";
 const app=express();
 const PORT =8080;
 
@@ -12,6 +14,7 @@ app.use(express.urlencoded({extended: true}));
 
 
 const productManager1 = new ProductManager(dirNameAsync,path);
+const cartManager1 = new CartManager(dirNameAsync,cartPath);
 
 // Saludos desde México
 app.get('/saludo', (req, res) => {
@@ -77,6 +80,17 @@ app.delete('/productos/:pid', async(req,res) =>{
     res.send(producto);
 })
 
+
+//Crear un carrito
+app.post('/cart', async(req,res) =>{
+    let cartProducts = req.body;
+    const crearProducto= await cartManager1.addCart(cartProducts.products);
+
+    /* if(!producto.title  || !producto.description || !producto.price || !producto.thumbnail || !producto.stock || !producto.status || !producto.category){
+        return res.status(400).send({status: "Error", msg: "Valores incompletos, revisar nuevamente"});
+    } */
+    res.send({status: "success" , msg: "Se agrego un carrito nuevo exitosamente"});
+})
 
 
 
