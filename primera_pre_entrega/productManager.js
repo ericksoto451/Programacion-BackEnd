@@ -57,6 +57,47 @@ export default class ProductManager {
         }
     }
 
+    async modifyProduct(title, description, price, thumbnail,stock,status,category,id){
+
+        if(!fs.existsSync(this.path)){
+            throw Error("El archivo no existe, por eso no es posible agregar ningún producto");
+        }else{
+            try{
+                let result;
+                let product = [
+                    {
+                        title: title,
+                        description: description,
+                        price: price,
+                        thumbnail: thumbnail,
+                        code: id,
+                        stock: stock,
+                        status: status,
+                        category: category
+                    }
+                ];
+
+                let jsonString = await fs.promises.readFile(this.path, "utf-8");
+                const parseoString = JSON.parse(jsonString);
+                this.products=parseoString;
+                let productPosition= this.products.findIndex((u) => id);
+                console.log(productPosition)
+                if(productPosition < 0){
+                    result=[{status:"info", error: "Usuario no encontrado"}];
+                }else{
+                    this.products[productPosition]=product;
+                    await fs.promises.writeFile(this.path, JSON.stringify(this.products));
+                    result=[{status:"success", msg: "Usuario encontrado y modificado"}];
+                }
+                return result;
+            
+            }catch(e){
+                Error(e);
+            }
+            
+        }
+    }
+
 
     getProducts = async() =>{
         if(!fs.existsSync(this.path)){

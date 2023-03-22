@@ -43,14 +43,26 @@ app.get('/productos/:userID', async(req,res) =>{
 
 //Metodo Post que agregará un nuevo producto
 app.post('/productos', async(req,res) =>{
-    let user = req.body;
-    console.log(user);
-    const producto= await productManager1.addProduct(user.title,user.description,user.price,user.thumbnail,user.stock,user.status,user.category);
+    let product = req.body;
+    const crearProducto= await productManager1.addProduct(product.title,product.description,product.price,product.thumbnail,product.stock,product.status,product.category);
 
     /* if(!producto.title  || !producto.description || !producto.price || !producto.thumbnail || !producto.stock || !producto.status || !producto.category){
         return res.status(400).send({status: "Error", msg: "Valores incompletos, revisar nuevamente"});
     } */
     res.send({status: "success" , msg: "Se agrego un usuario nuevo exitosamente"});
+})
+
+
+//Metodo Put que modificará un producto existente
+app.put('/productos/:pid', async(req,res) =>{
+    let id=parseInt(req.params.pid);
+    let product = req.body;
+    const producto= await productManager1.modifyProduct(product.title,product.description,product.price,product.thumbnail,product.stock,product.status,product.category,id);
+
+    /* if(!producto.title  || !producto.description || !producto.price || !producto.thumbnail || !producto.stock || !producto.status || !producto.category){
+        return res.status(400).send({status: "Error", msg: "Valores incompletos, revisar nuevamente"});
+    } */
+    res.send(producto);
 })
 
 
