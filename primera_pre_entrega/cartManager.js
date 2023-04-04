@@ -32,7 +32,7 @@ export default class CartManager {
                 let cart = [
                     {
                         code: idCreated,
-                        products:productos
+                        products:[productos]
                     }
                 ];
 

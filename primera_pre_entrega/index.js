@@ -52,6 +52,7 @@ app.post('/productos', async(req,res) =>{
     /* if(!producto.title  || !producto.description || !producto.price || !producto.thumbnail || !producto.stock || !producto.status || !producto.category){
         return res.status(400).send({status: "Error", msg: "Valores incompletos, revisar nuevamente"});
     } */
+    console.log(crearProducto)
     res.send({status: "success" , msg: "Se agrego un usuario nuevo exitosamente"});
 })
 
@@ -84,7 +85,7 @@ app.delete('/productos/:pid', async(req,res) =>{
 //Crear un carrito
 app.post('/cart', async(req,res) =>{
     let cartProducts = req.body;
-    const crearProducto= await cartManager1.addCart(cartProducts.products);
+    const crearProducto= await cartManager1.addCart(cartProducts.productos);
 
     /* if(!producto.title  || !producto.description || !producto.price || !producto.thumbnail || !producto.stock || !producto.status || !producto.category){
         return res.status(400).send({status: "Error", msg: "Valores incompletos, revisar nuevamente"});
